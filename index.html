@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#1f8670">
+<title>受付 | ポックル動物病院</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f7f8;color:#1f2a2e;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;font-size:16px;line-height:1.6}
+main{max-width:480px;margin:0 auto;padding:16px 16px 40px}
+header{text-align:center;padding:8px 0 12px}
+header b{font-size:20px;color:#1f8670;display:block}
+header span{font-size:13px;color:#6b7a80}
+.delay{background:#fff4d6;border:2px solid #e0a100;color:#6b4a00;border-radius:12px;padding:10px 14px;font-weight:700;text-align:center;margin-bottom:14px;font-size:17px}
+.card{background:#fff;border:1px solid #e3e8ea;border-radius:14px;padding:16px;margin-bottom:14px}
+h2{font-size:16px;margin:0 0 10px}
+.opt{display:block;border:2px solid #e3e8ea;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;background:#fff}
+.opt input{margin-right:8px;transform:scale(1.3)}
+.opt.on{border-color:#1f8670;background:#eef8f5}
+.opt small{display:block;color:#6b7a80;font-size:13px;margin-left:26px}
+.notice{border-radius:10px;padding:12px 14px;margin:8px 0 4px;font-size:15px}
+.notice.info{background:#eef4fb;color:#123d66;border:1px solid #b5d4f4}
+.notice.warn{background:#fff1f0;color:#8a1f17;border:2px solid #e24b4a;font-weight:700}
+.notice b{font-size:17px}
+.agree{display:flex;gap:10px;align-items:flex-start;margin-top:10px;font-weight:700;font-size:15px}
+.agree input{transform:scale(1.5);margin-top:6px}
+label.f{display:block;font-size:14px;color:#46555b;margin:12px 0 4px}
+input[type=text],input[type=tel]{width:100%;font-size:18px;padding:12px;border:1px solid #c9d2d6;border-radius:10px;background:#fff}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px;margin-top:8px;color:#46555b}
+.chk input{transform:scale(1.3)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.two .opt{text-align:center;font-weight:700;font-size:17px;padding:14px 8px}
+.two .opt input{display:none}
+button.go{width:100%;background:#1f8670;color:#fff;border:0;border-radius:14px;font-size:19px;font-weight:700;padding:16px;margin-top:6px}
+button.go:disabled{background:#9db8b0}
+.err{color:#b3261e;font-size:14px;font-weight:700;margin-top:8px;min-height:1em}
+.hide{display:none!important}
+.keep{position:sticky;top:0;z-index:5;background:#c62828;color:#fff;font-weight:700;text-align:center;padding:12px 10px;font-size:17px;line-height:1.4;margin:-16px -16px 14px}
+.keep small{display:block;font-weight:400;font-size:13px;opacity:.95}
+.big{text-align:center;padding:28px 16px}
+.big .t{font-size:22px;font-weight:700}
+.big .s{color:#46555b;margin-top:6px}
+.called{background:#1f8670;color:#fff;border:0}
+.called .t{font-size:30px;line-height:1.4}
+.called .room{font-size:56px;font-weight:800;display:block;margin:8px 0}
+.called .s{color:#e6fff7}
+.flash{animation:fl 1s infinite}
+@keyframes fl{50%{background:#26a585}}
+.me{font-size:14px;color:#46555b}
+.me div{padding:3px 0;border-bottom:1px dashed #e3e8ea}
+a.re{display:block;text-align:center;color:#6b7a80;font-size:13px;margin-top:18px}
+.mock{background:#333;color:#fff;font-size:12px;text-align:center;padding:4px;margin:-16px -16px 10px}
+</style></head><body><main>
+<div id="mockbar" class="mock hide">試験モード（データはこの端末内だけ）</div>
+
+<!-- 受付フォーム -->
+<section id="vForm">
+<header><b>ポックル動物病院</b><span>受付フォーム</span></header>
+<div id="delayF" class="delay hide"></div>
+
+<div class="card">
+<h2>1. ご来院の区分</h2>
+<label class="opt"><input type="radio" name="cat" value="reserved">予約あり</label>
+<label class="opt"><input type="radio" name="cat" value="contacted">予約なし・事前に電話連絡済み</label>
+<label class="opt"><input type="radio" name="cat" value="walkin">予約なし・連絡なしで来院</label>
+
+<div id="nReserved" class="notice info hide">診察状況により、ご予約の方でも<b>10〜20分程度</b>お待ちいただくことがあります。</div>
+<div id="nUrgent" class="notice warn hide">緊急枠での診察となるため、<b>1〜2時間</b>お待ちいただく可能性があります。</div>
+<div id="nFee" class="notice warn hide">事前のご連絡なくご来院の場合、<b>緊急対応料 3,000円（税込）</b>を頂戴します。</div>
+<label id="agreeBox" class="agree hide"><input type="checkbox" id="agree"><span id="agreeText">上記を確認しました</span></label>
+</div>
+
+<div class="card">
+<h2>2. 診察券番号</h2>
+<label class="f" for="card">診察券に書かれた番号（ハイフンより前の数字）</label>
+<input type="tel" id="card" inputmode="numeric" maxlength="5" placeholder="例：1234" autocomplete="off" style="font-size:26px;letter-spacing:3px;text-align:center">
+<div class="notice info">診察券をお忘れの方・番号がわからない方・初めての方は、<b>受付スタッフにお声がけください</b>。</div>
+</div>
+
+<div class="card">
+<h2>3. お待ちいただく場所</h2>
+<div class="two">
+<label class="opt"><input type="radio" name="wait" value="car">お車で待つ</label>
+<label class="opt"><input type="radio" name="wait" value="inside">院内で待つ</label>
+</div>
+<div id="carBox" class="hide">
+<label class="f" for="car">お車の車種・色</label>
+<input type="text" id="car" maxlength="30" placeholder="例：白のプリウス" autocomplete="off">
+<div class="notice info">順番が来たら、<b>この画面</b>でお呼びします。送信後は画面を閉じずにお待ちください。</div>
+</div>
+</div>
+
+<button class="go" id="send">受付する</button>
+<div class="err" id="err"></div>
+</section>
+
+<!-- 待機画面 -->
+<section id="vWait" class="hide">
+<div id="keep" class="keep hide">このページを閉じないでください<small>順番が来たら、この画面と音でお呼びします</small></div>
+<header><b>ポックル動物病院</b></header>
+<div id="delayW" class="delay hide"></div>
+<div id="box" class="card big"><div class="t" id="t"></div><div class="s" id="s"></div></div>
+<div class="card me" id="me"></div>
+<a href="#" class="re" id="redo">別のどうぶつを受付する／やり直す</a>
+</section>
+</main>
+
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script>
+(function(){
+var $=function(id){return document.getElementById(id)};
+var LS='uketsuke_';
+if(RCP.isMock)$('mockbar').classList.remove('hide');
+function today(){return new Date(Date.now()+9*3600e3).toISOString().slice(0,10)}
+function showDelay(el,d){if(d>0){el.textContent='現在、診察が約'+d+'分遅れています';el.classList.remove('hide')}else el.classList.add('hide')}
+
+/* ---- 音・バイブ・画面スリープ防止 ---- */
+var ac=null;
+function unlock(){try{if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)()}if(ac.state==='suspended')ac.resume()}catch(e){}}
+document.addEventListener('touchstart',unlock,{passive:true});document.addEventListener('click',unlock);
+function beep(n){if(!ac)return;for(var i=0;i<n;i++){var o=ac.createOscillator(),g=ac.createGain();o.frequency.value=i%2?880:1175;o.connect(g);g.connect(ac.destination);var t=ac.currentTime+i*0.35;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.6,t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+0.3);o.start(t);o.stop(t+0.32)}}
+var wl=null;
+function keepAwake(){if('wakeLock' in navigator&&!wl&&document.visibilityState==='visible'){navigator.wakeLock.request('screen').then(function(l){wl=l;l.addEventListener('release',function(){wl=null})}).catch(function(){})}}
+
+/* ---- フォーム ---- */
+function sel(name){var x=document.querySelector('input[name='+name+']:checked');return x?x.value:''}
+function mark(name){document.querySelectorAll('input[name='+name+']').forEach(function(i){i.parentNode.classList.toggle('on',i.checked)})}
+function refreshForm(){
+  var c=sel('cat');mark('cat');mark('wait');
+  $('nReserved').classList.toggle('hide',c!=='reserved');
+  $('nUrgent').classList.toggle('hide',c!=='contacted'&&c!=='walkin');
+  $('nFee').classList.toggle('hide',c!=='walkin');
+  $('agreeBox').classList.toggle('hide',c!=='contacted'&&c!=='walkin');
+  $('agreeText').textContent=c==='walkin'?'待ち時間と緊急対応料について確認しました':'待ち時間について確認しました';
+  $('carBox').classList.toggle('hide',sel('wait')!=='car');
+}
+document.querySelectorAll('input[name=cat]').forEach(function(i){i.addEventListener('change',function(){$('agree').checked=false;refreshForm()})});
+document.querySelectorAll('input[name=wait]').forEach(function(i){i.addEventListener('change',refreshForm)});
+['card','car'].forEach(function(k){var v=localStorage.getItem(LS+'f_'+k);if(v)$(k).value=v});
+var qc=new URLSearchParams(location.search).get('c');if(qc&&/^[0-9]{1,5}$/.test(qc))$('card').value=qc;
+refreshForm();
+
+$('send').addEventListener('click',function(){
+  unlock();
+  var c=sel('cat'),w=sel('wait');
+  var card=$('card').value.replace(/[０-９]/g,function(x){return String.fromCharCode(x.charCodeAt(0)-65248)}).replace(/[^0-9]/g,'');
+  var e='';
+  if(!c)e='ご来院の区分を選んでください';
+  else if(c!=='reserved'&&!$('agree').checked)e='待ち時間'+(c==='walkin'?'・緊急対応料':'')+'の確認にチェックを入れてください';
+  else if(!/^[0-9]{1,5}$/.test(card))e='診察券番号を入力してください（わからない方は受付スタッフへ）';
+  else if(!w)e='お待ちいただく場所を選んでください';
+  else if(w==='car'&&!$('car').value.trim())e='お車の車種・色を入力してください';
+  $('err').textContent=e;if(e)return;
+  $('send').disabled=true;$('send').textContent='送信中…';
+  localStorage.setItem(LS+'f_card',card);localStorage.setItem(LS+'f_car',$('car').value.trim());
+  RCP.post({action:'checkin',cat:c,card:card,wait:w,car:w==='car'?$('car').value.trim():'',agree:$('agree').checked})
+  .then(function(r){
+    if(!r.ok)throw new Error(r.err||'送信できませんでした');
+    localStorage.setItem(LS+'id',r.id);localStorage.setItem(LS+'day',today());
+    startWait(r.id);
+  }).catch(function(x){$('err').textContent='送信できませんでした。受付スタッフにお声がけください（'+(x.message||x)+'）'})
+  .then(function(){$('send').disabled=false;$('send').textContent='受付する'});
+});
+
+/* ---- 待機画面 ---- */
+var cur=null,timer=null,lastStatus='';
+var CAT={reserved:'予約あり',contacted:'予約なし・連絡済み',walkin:'予約なし・連絡なし'};
+function startWait(id){
+  cur=id;$('vForm').classList.add('hide');$('vWait').classList.remove('hide');window.scrollTo(0,0);
+  poll();clearInterval(timer);timer=setInterval(poll,8000);
+}
+function poll(){
+  if(!cur)return;
+  RCP.get({action:'status',id:cur}).then(render).catch(function(){});
+}
+function render(r){
+  showDelay($('delayW'),r.delay||0);
+  if(!r.ok){setBox('受付情報が見つかりません','お手数ですが、受付スタッフにお声がけください。');$('keep').classList.add('hide');return}
+  var car=r.wait==='car';
+  $('keep').classList.toggle('hide',!(car&&(r.status==='new'||r.status==='accepted'||r.status==='called')));
+  $('me').innerHTML='';
+  [['診察券番号',r.card],['区分',CAT[r.cat]],['お待ちの場所',car?'お車（'+r.car+'）':'院内']].forEach(function(a){var d=document.createElement('div');d.textContent=a[0]+'：'+a[1];$('me').appendChild(d)});
+  var box=$('box');box.classList.remove('called','flash');
+  if(r.status==='called'){
+    box.classList.add('called','flash');
+    $('t').innerHTML='';var t=$('t');t.appendChild(document.createTextNode('お待たせしました'));
+    var s=document.createElement('span');s.className='room';s.textContent='診察室 '+r.room;t.appendChild(s);t.appendChild(document.createTextNode('へお入りください'));
+    $('s').textContent='どうぶつと一緒にお越しください';
+    if(lastStatus!=='called'){beep(6);if(navigator.vibrate)navigator.vibrate([500,200,500,200,800]);document.title='【お呼びしています】診察室'+r.room}
+  }else if(r.status==='new'){
+    setBox('診察券番号 '+r.card+' で受付しました',car?'スタッフが確認しています。このままお車でお待ちください。':'受付カウンターへお進みください。');
+  }else if(r.status==='accepted'){
+    setBox('受付が完了しました',car?'順番が来たら、この画面でお呼びします。':'院内でお待ちください。');
+    $('s').textContent+='（番号が違う場合は受付スタッフへ）';
+  }else if(r.status==='entered'){
+    setBox('ご来院ありがとうございます','');stop();
+  }else if(r.status==='cancelled'){
+    setBox('この受付は取り消されました','お手数ですが、受付スタッフにお声がけください。');stop();
+  }
+  if(r.status!=='called')document.title='受付 | ポックル動物病院';
+  lastStatus=r.status;
+  if(car&&r.status!=='entered'&&r.status!=='cancelled')keepAwake();
+}
+function setBox(t,s){$('t').textContent=t;$('s').textContent=s}
+function stop(){clearInterval(timer);timer=null;localStorage.removeItem(LS+'id')}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'){poll();keepAwake()}});
+$('redo').addEventListener('click',function(ev){ev.preventDefault();if(!confirm('受付画面に戻りますか？（送信済みの受付は取り消されません）'))return;clearInterval(timer);cur=null;localStorage.removeItem(LS+'id');$('vWait').classList.add('hide');$('vForm').classList.remove('hide');$('agree').checked=false;refreshForm()});
+
+/* ---- 初期表示：当日の受付が残っていれば待機画面へ ---- */
+var saved=localStorage.getItem(LS+'id');
+if(saved&&localStorage.getItem(LS+'day')===today())startWait(saved);
+RCP.get({action:'public'}).then(function(r){showDelay($('delayF'),r.delay||0)}).catch(function(){});
+})();
+</script>
+</body></html>
